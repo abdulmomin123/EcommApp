@@ -10,7 +10,24 @@ const StripeButton: FC<Props> = ({ price }) => {
   const publishableKey =
     'pk_test_51IIBbiK2oV9bQlX47GNbSDvyL5wo2yErhp1WPpBCu24GeMmwlxXi7qGGBxI9WeIuXbiAKzsFwbfKlbvy13favRLB003GKsyoUq';
 
-  const onToken = (token: Token) => console.log(token);
+  const onToken = async (token: Token) => {
+    try {
+      const paymentStatus = await fetch('/payment', {
+        method: 'post',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ token, amount: priceInCents }),
+      });
+
+      if (paymentStatus.status !== 200)
+        return alert('Something went wrong. Try again :(');
+
+      alert('Your payment was successful!');
+    } catch (err) {
+      alert('Something went wrong. Try again :(');
+    }
+  };
 
   return (
     <StripeCheckout
