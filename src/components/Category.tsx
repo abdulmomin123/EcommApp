@@ -6,29 +6,32 @@ import { Collection, CollectionNames } from '../Types';
 import CollectionItem from './CollectionItem';
 import Spinner from './Spinner';
 
+const GET_COLLECTION_BY_TITLE = gql`
+  query getCollectionsByTitle($title: String!) {
+    getCollectionsByTitle(title: $title) {
+      id
+      title
+      items {
+        id
+        name
+        price
+        imageUrl
+      }
+    }
+  }
+`;
+
 const Category = () => {
   const params = useParams<{ categoryId: CollectionNames }>();
 
   // Using graphQL
   const { loading, error, data } = useQuery<{
     getCollectionsByTitle: Collection;
-  }>(
-    gql`
-      query getCollectionsByTitle($title: String!) {
-        getCollectionsByTitle(title: $title) {
-          id
-          title
-          items {
-            id
-            name
-            price
-            imageUrl
-          }
-        }
-      }
-    `,
-    { variables: { title: params.categoryId } }
-  );
+  }>(GET_COLLECTION_BY_TITLE, {
+    variables: {
+      title: params.categoryId,
+    },
+  });
 
   // Scrolling to the top
   useEffect(() => window.scrollTo({ top: 0, behavior: 'smooth' }), []);

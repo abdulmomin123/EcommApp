@@ -15,7 +15,10 @@ const CollectionPreview: React.FC<Props> = ({
 
   return (
     <div className="collection-preview">
-      <Link to={`${match.path}/${encodeURI(title)}`} className="title">
+      <Link
+        to={`${match.path}/${encodeURI(title.toLowerCase())}`}
+        className="title"
+      >
         {title.toUpperCase()}
       </Link>
       <div className="preview">
