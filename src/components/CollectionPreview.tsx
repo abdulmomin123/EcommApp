@@ -9,13 +9,13 @@ interface Props {
 }
 
 const CollectionPreview: React.FC<Props> = ({
-  collection: { title, items, routeName },
+  collection: { title, items },
 }) => {
   const match = useRouteMatch();
 
   return (
     <div className="collection-preview">
-      <Link to={`${match.path}/${routeName}`} className="title">
+      <Link to={`${match.path}/${encodeURI(title)}`} className="title">
         {title.toUpperCase()}
       </Link>
       <div className="preview">

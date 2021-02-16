@@ -1,17 +1,44 @@
+import { gql, useQuery } from '@apollo/client';
 import { useEffect } from 'react';
-import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { selectCollection } from '../redux/shop/shop.selectors';
 import '../styles/Collection.scss';
-import { CollectionNames } from '../Types';
+import { Collection, CollectionNames } from '../Types';
 import CollectionItem from './CollectionItem';
+import Spinner from './Spinner';
 
 const Category = () => {
   const params = useParams<{ categoryId: CollectionNames }>();
-  const { title, items } = useSelector(selectCollection(params.categoryId));
+
+  // Using graphQL
+  const { loading, error, data } = useQuery<{
+    getCollectionsByTitle: Collection;
+  }>(
+    gql`
+      query getCollectionsByTitle($title: String!) {
+        getCollectionsByTitle(title: $title) {
+          id
+          title
+          items {
+            id
+            name
+            price
+            imageUrl
+          }
+        }
+      }
+    `,
+    { variables: { title: params.categoryId } }
+  );
 
   // Scrolling to the top
   useEffect(() => window.scrollTo({ top: 0, behavior: 'smooth' }), []);
+
+  if (loading) return <Spinner />;
+  if (error) return <h1>Error :(</h1>;
+
+  const {
+    getCollectionsByTitle: { title, items },
+  } = data!;
 
   return (
     <div className="collection-page">

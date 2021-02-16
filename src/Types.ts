@@ -20,7 +20,6 @@ export interface Product extends Item {
 export interface Collection {
   id: string;
   title: string;
-  routeName: string;
   items: Item[];
 }
 
