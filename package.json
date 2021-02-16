@@ -20,7 +20,6 @@
     "@types/reselect": "^2.2.0",
     "@types/styled-components": "^5.1.7",
     "@types/uuid": "^8.3.0",
-    "apollo-boost": "^0.4.9",
     "firebase": "^8.2.5",
     "graphql": "^15.5.0",
     "node-sass": "^5.0.0",

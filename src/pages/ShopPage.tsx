@@ -1,3 +1,4 @@
+import { gql, useQuery } from '@apollo/client';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Route, Switch, useRouteMatch } from 'react-router-dom';
@@ -13,6 +14,17 @@ const ShopPage = () => {
   const dispatch = useDispatch();
 
   const match = useRouteMatch();
+
+  const { loading, error, data } = useQuery(gql`
+    query {
+      collections {
+        id
+        title
+      }
+    }
+  `);
+
+  console.log(loading, error, data);
 
   // Fetching collections from firestore
   useEffect(() => {
