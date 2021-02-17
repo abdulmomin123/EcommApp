@@ -3,7 +3,6 @@ import { ReactComponent as Logo } from '../assets/logo.svg';
 import CartIcon from './CartIcon';
 import CartDropdown from './CartDropdown';
 import { selectCurrentUser } from '../redux/user/user.selectors';
-import { selectCartHidden } from '../redux/cart/cart.selectors';
 import { createStructuredSelector } from 'reselect';
 import { RootState } from '../redux/rootReducer';
 import { UserProfile } from '../Types';
@@ -14,18 +13,24 @@ import {
   OptionsContainer,
 } from '../styles/Header.styles';
 import { signOutStart } from '../redux/user/user.actions';
+import { gql, useQuery } from '@apollo/client';
 
 interface Selection {
   currentUser: UserProfile | null;
-  isDropdownHidden: boolean;
 }
 
 const Header = () => {
+  // Using graphQL
+  const { data } = useQuery<{ cartHidden: boolean }>(gql`
+    query cartHidden {
+      cartHidden
+    }
+  `);
+
   // Using store
-  const { currentUser, isDropdownHidden } = useSelector(
+  const { currentUser } = useSelector(
     createStructuredSelector<RootState, Selection>({
       currentUser: selectCurrentUser,
-      isDropdownHidden: selectCartHidden,
     })
   );
   const dispatch = useDispatch();
@@ -56,7 +61,7 @@ const Header = () => {
       </OptionsContainer>
 
       {/* Cart dropdown */}
-      {isDropdownHidden ? null : <CartDropdown />}
+      {data?.cartHidden ? null : <CartDropdown />}
     </HeaderContainer>
   );
 };
