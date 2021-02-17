@@ -1,6 +1,5 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
-import { addToCart } from '../redux/cart/cart.actions';
+import { updateCartItems } from '../graphql/resolvers';
 import '../styles/CollectionItem.scss';
 import { Item } from '../Types';
 import CustomButton from './CustomButton';
@@ -10,11 +9,9 @@ interface Props {
 }
 
 const CollectionItem: React.FC<Props> = ({
-  item: { id, name, price, imageUrl },
+  item: { name, price, imageUrl },
+  item,
 }) => {
-  // Using store
-  const dispatch = useDispatch();
-
   return (
     <div className="collection-item">
       <div
@@ -31,9 +28,7 @@ const CollectionItem: React.FC<Props> = ({
 
       <div
         className={'btn-container'}
-        onClick={() =>
-          dispatch(addToCart({ id, name, price, imageUrl, quantity: 1 }))
-        }
+        onClick={() => updateCartItems({ ...item, quantity: 1 })}
       >
         {/* Add to cart */}
         <CustomButton inverted>Add To Cart</CustomButton>

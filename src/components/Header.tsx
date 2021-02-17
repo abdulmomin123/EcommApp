@@ -19,9 +19,13 @@ interface Selection {
   currentUser: UserProfile | null;
 }
 
+interface Data {
+  cartHidden: boolean;
+}
+
 const Header = () => {
   // Using graphQL
-  const { data } = useQuery<{ cartHidden: boolean }>(gql`
+  const { data } = useQuery<Data>(gql`
     query cartHidden {
       cartHidden
     }

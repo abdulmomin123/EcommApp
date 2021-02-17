@@ -1,15 +1,14 @@
-import { useDispatch, useSelector } from 'react-redux';
+import { useQuery } from '@apollo/client';
 import { useHistory } from 'react-router-dom';
-import { toggleCartHidden } from '../redux/cart/cart.actions';
-import { selectCartItems } from '../redux/cart/cart.selectors';
+import { GET_CART_ITEMS, toggleCartHidden } from '../graphql/resolvers';
 import '../styles/CartDropdown.scss';
+import { Product } from '../Types';
 import CartItem from './CartItem';
 import CustomButton from './CustomButton';
 
 const CartDropdown = () => {
-  // Using store
-  const items = useSelector(selectCartItems);
-  const dispatch = useDispatch();
+  // Using gql
+  const { data } = useQuery<{ cartItems: Product[] }>(GET_CART_ITEMS);
 
   const history = useHistory();
 
@@ -17,8 +16,8 @@ const CartDropdown = () => {
     <div className="cart-dropdown">
       <div className="cart-items">
         {/* The items */}
-        {items.length ? (
-          items.map(item => <CartItem item={item} key={item.id} />)
+        {data?.cartItems.length ? (
+          data.cartItems.map(item => <CartItem item={item} key={item.id} />)
         ) : (
           <span className="empty-message">Your cart is empty</span>
         )}
@@ -27,7 +26,7 @@ const CartDropdown = () => {
       <CustomButton
         onClick={() => (
           // eslint-disable-next-line
-          history.push('/checkout'), dispatch(toggleCartHidden())
+          history.push('/checkout'), toggleCartHidden()
         )}
       >
         GO TO CHECKOUT

@@ -1,17 +1,15 @@
-import { useSelector } from 'react-redux';
 import '../styles/CartIcon.scss';
 import { ReactComponent as ShoppingIcon } from '../assets/shopping-bag.svg';
-import { selectCartItemsCount } from '../redux/cart/cart.selectors';
-import { toggleCartHidden } from '../graphql/resolvers';
+import { GET_CART_ITEMS_COUNT, toggleCartHidden } from '../graphql/resolvers';
+import { useQuery } from '@apollo/client';
 
 const CartIcon = () => {
-  // Using store
-  const quantity = useSelector(selectCartItemsCount);
+  const { data } = useQuery<{ cartItemsCount: boolean }>(GET_CART_ITEMS_COUNT);
 
   return (
     <div className="cart-icon" onClick={() => toggleCartHidden()}>
       <ShoppingIcon className="shopping-icon" />
-      <span className="item-count">{quantity()}</span>
+      <span className="item-count">{data?.cartItemsCount}</span>
     </div>
   );
 };

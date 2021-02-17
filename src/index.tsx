@@ -13,20 +13,32 @@ import App from './components/App';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
+import { Product } from './Types';
 
 export const client = new ApolloClient({
   uri: 'https://crwn-clothing.com/',
   cache: new InMemoryCache(),
 });
 
-client.writeQuery({
+interface State {
+  cartHidden: boolean;
+  cartItems: Product[];
+  cartItemsCount: number;
+}
+
+// State of the app
+client.writeQuery<State>({
   query: gql`
     query cartHidden {
       cartHidden
+      cartItems
+      cartItemsCount
     }
   `,
   data: {
     cartHidden: true,
+    cartItems: [],
+    cartItemsCount: 0,
   },
 });
 

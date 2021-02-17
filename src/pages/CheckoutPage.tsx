@@ -1,12 +1,15 @@
+import { useQuery } from '@apollo/client';
 import { useSelector } from 'react-redux';
 import CheckoutItem from '../components/CheckoutItem';
 import StripeButton from '../components/StripeButton';
-import { selectCartItems, selectCartTotal } from '../redux/cart/cart.selectors';
+import { GET_CART_ITEMS } from '../graphql/resolvers';
+import { selectCartTotal } from '../redux/cart/cart.selectors';
 import '../styles/CheckoutPage.scss';
+import { Product } from '../Types';
 
 const CheckoutPage = () => {
-  // Using store
-  const cartItems = useSelector(selectCartItems);
+  // Using gql & store
+  const { data } = useQuery<{ cartItems: Product[] }>(GET_CART_ITEMS);
   const totalPrice = useSelector(selectCartTotal);
 
   return (
@@ -30,7 +33,7 @@ const CheckoutPage = () => {
       </div>
 
       {/* The cart items */}
-      {cartItems.map(cartItem => (
+      {data?.cartItems.map(cartItem => (
         <CheckoutItem key={cartItem.id} cartItem={cartItem} />
       ))}
       <div className="total">TOTAL: ${totalPrice}</div>
