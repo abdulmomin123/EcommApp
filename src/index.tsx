@@ -1,6 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
+import {
+  ApolloClient,
+  ApolloProvider,
+  gql,
+  InMemoryCache,
+} from '@apollo/client';
 import store from './redux/store';
 import { persistor } from './redux/store';
 import './index.scss';
@@ -12,6 +17,17 @@ import { PersistGate } from 'redux-persist/integration/react';
 const client = new ApolloClient({
   uri: 'https://crwn-clothing.com/',
   cache: new InMemoryCache(),
+});
+
+client.writeQuery({
+  query: gql`
+    query cartHidden {
+      cartHidden
+    }
+  `,
+  data: {
+    cartHidden: true,
+  },
 });
 
 ReactDOM.render(
