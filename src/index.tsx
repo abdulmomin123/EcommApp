@@ -14,6 +14,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import { Product } from './Types';
+import { register } from './serviceWorkerRegistration';
 
 export const client = new ApolloClient({
   uri: 'https://crwn-clothing.com/',
@@ -56,3 +57,6 @@ ReactDOM.render(
   </React.StrictMode>,
   document.getElementById('root')
 );
+
+// Registering service worker
+register();
